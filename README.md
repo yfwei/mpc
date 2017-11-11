@@ -37,8 +37,17 @@ The vehicle model used for this project is based on a Kinematic model. It compri
   - cte[t+1] = cte[t] + v[t] * sin(epsi[t]) * dt
   - epsi[t+1] = epsi[t] + (v[t] / Lf) * delta[t] * dt
 
+- Cost Functions
+  - Cross Track Error
+  - The difference of vehicle orientation and trajectory orientation
+  - The reference velocity
+  - Steering angle change rate
+  - Acceleration change rate
+  - The change between sequential actuations
+  
+
 #### 2. Timestep Length and Elapsed Duration (N & dt).
-The *N*(timestep length) and *dt*(elapsed duration between timesteps) were chosen based on the maximum speed the model wants to reach. The first thing I did was to determine how long the duration of the future predictions (*T*), which is the product of *N* and *dt* should be for the speed I wanted to achieve. After a lot trial and error, I found 2 seoncds seems good enough to drive the car at 100 MPH. 
+The *N*(timestep length) and *dt*(elapsed duration between timesteps) were chosen based on the maximum speed the model wants to reach. The first thing I did was to determine how long the duration of the future predictions (*T*), which is the product of *N* and *dt*, should be for the speed I wanted to achieve. After a lot trial and error, I found 2 seoncds seems good enough to drive the car at 100 MPH. 
 
 Once *T* was selected, I tried to use a large *N*(e.g. 50) and a small *dt*(e.g. 0.04) and thought it was going to drive my car like a pro racing driver, but the reality hit me hard. The model drove the car like a drunk driver. The prediction time become too long to make any useful trajectory predictions on my computer due to a large N. In order to preserve *T*, the only thing I could do is to lower *N* and increase *dt*. The final values are *15* and *0.13*, respectively.    
 
