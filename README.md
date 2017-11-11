@@ -29,13 +29,15 @@ The vehicle model used for this project is based on a Kinematic model. It compri
   - -25 < steering angle < 25
   - -1 < acceleration < 1
 
-- Model
+- Vehicle Model
   - x[t+1] = x[t] + v[t] * cos(psi[t]) * dt
   - y[t+1] = y[t] + v[t] * sin(psi[t]) * dt
   - psi[t+1] = psi[t] + (v[t] / Lf) * delta[t] * dt
   - v[t+1] = v[t] + a[t] * dt
   - cte[t+1] = cte[t] + v[t] * sin(epsi[t]) * dt
   - epsi[t+1] = epsi[t] + (v[t] / Lf) * delta[t] * dt
+
+The above equations will be treated as constrains for MPC.
 
 - Cost Functions
   - Cross Track Error
@@ -44,7 +46,8 @@ The vehicle model used for this project is based on a Kinematic model. It compri
   - Steering angle change rate
   - Acceleration change rate
   - The change between sequential actuations
-  
+ 
+My MPC controller ouptuts the future trajectory by optimizing the cost functions subject to the constraints.
 
 #### 2. Timestep Length and Elapsed Duration (N & dt).
 The *N*(timestep length) and *dt*(elapsed duration between timesteps) were chosen based on the maximum speed the model wants to reach. The first thing I did was to determine how long the duration of the future predictions (*T*), which is the product of *N* and *dt*, should be for the speed I wanted to achieve. After a lot trial and error, I found 2 seoncds seems good enough to drive the car at 100 MPH. 
