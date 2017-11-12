@@ -30,13 +30,30 @@ string hasData(string s) {
   return "";
 }
 
-
 double curvature(Eigen::VectorXd coeffs, double x) {
 	double firstDerivative = 3 * coeffs[3] * (x * x) + 2 * coeffs[2] * x + coeffs[1];
 	double secondDerivative = 6 * coeffs[3] * x + 2 * coeffs[2];
 	double R = pow((1 + pow(firstDerivative, 2.0)), 1.5) / abs(secondDerivative);
 
 	return R;
+}
+
+/*
+ * Transform waypoints from the map's coordinate system to the
+ * vehicle's coordinate system
+ *
+ * @param px the x position of the vehicle
+ * @param py the y position of the vehicle
+ * @param psi the orientation of the vehicle
+ */
+void transformCoordinate(const double px, const double py, const double psi,
+    vector<double>& ptsx, vector<double>& ptsy) {
+  for (int i = 0; i < (int)ptsx.size(); i++) {
+    double x = (ptsx[i] - px) * cos(-psi) - (ptsy[i] - py) * sin(-psi);
+    double y = (ptsx[i] - px) * sin(-psi) + (ptsy[i] - py) * cos(-psi);
+    ptsx[i] = x;
+    ptsy[i] = y;
+  }
 }
 
 int main() {
@@ -73,14 +90,7 @@ int main() {
           double v = j[1]["speed"];
           double mpsV = mph2mps(v);
 
-          // Transform waypoints from the map's coordinate system to the
-          // vehicle's coordinate system
-          for (int i = 0; i < (int)ptsx.size(); i++) {
-        	  double x = (ptsx[i] - px) * cos(-psi) - (ptsy[i] - py) * sin(-psi);
-        	  double y = (ptsx[i] - px) * sin(-psi) + (ptsy[i] - py) * cos(-psi);
-        	  ptsx[i] = x;
-        	  ptsy[i] = y;
-          }
+          transformCoordinate(px, py, psi, ptsx, ptsy);
 
           // After coordinate system transformation, the vehicle's position
           // becomes the origin.
@@ -127,12 +137,10 @@ int main() {
           for (int i = 0; i < waypointsY.size(); i++)
             cout << "R=" << curvature(coeffs, waypointsY[i]) << "\n";
 #endif
-          double maxVelocity = 110;
+          double maxVelocity = 125;
           double radiusOfCurvature = curvature(coeffs, waypointsY[0]);
           if (radiusOfCurvature < 50)
             maxVelocity = 70;
-          else if (radiusOfCurvature < 100)
-            maxVelocity = 95;
 
           /*
           * Calculate steering angle and throttle using MPC.
