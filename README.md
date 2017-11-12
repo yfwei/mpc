@@ -61,4 +61,7 @@ Before starting the MPC procedure, I transformed the waypoints from the map's co
 I predicted the initial state with the vehicle model for the duration of the latency, which is 100 milliseconds in this project. The resulting state beomes the new initial state for MPC.
 
 ## Result
-My car is able to reach 102 MPH on my computer and drives around the track endlessly.
+My car is able to reach 108 MPH on my computer and drives around the track endlessly:
+
+[![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/VQonAY96h9Q/0.jpg)](https://www.youtube.com/watch?v=VQonAY96h9Q)
+
